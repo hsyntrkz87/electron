@@ -531,12 +531,14 @@ void NodeBindings::LoadEnvironment(node::Environment* env) {
 }
 
 void NodeBindings::PrepareMessageLoop() {
+#if !defined(OS_WIN)
   // If the backend fd hasn't changed, don't proceed.
   int backend_fd = uv_backend_fd(uv_loop_);
   if (backend_fd == backend_fd_)
     return;
 
   backend_fd_ = backend_fd;
+#endif
 
   // Add dummy handle for libuv, otherwise libuv would quit when there is
   // nothing to do.
